@@ -13,7 +13,6 @@
   <a href="docs/Manual%20de%20usuario%20-%20PetCareApp.pdf"><b>Manual de usuario (PDF)</b></a>
 </p>
 
-Proyecto de la asignatura **Gerencia de Proyectos Informáticos**, Politécnico Grancolombiano (Grupo B03, Subgrupo 27).
 
 ![Panel del administrador](docs/manual/img/05-inicio-admin.jpg)
 
@@ -183,12 +182,8 @@ Implementa las cinco tablas del modelo entidad-relación de la Entrega 2 (`propi
 - `vacuna.fecha_proxima`: fecha del refuerzo, usada para los recordatorios.
 - Índice único `uq_cita_franja` sobre `cita(fecha, hora)` para las citas programadas: impide reservar dos veces la misma franja.
 
-## 9. Manual de usuario
-
-El manual explica, con capturas, el uso de la aplicación para propietarios y administradores: **[docs/Manual de usuario - PetCareApp.pdf](docs/Manual%20de%20usuario%20-%20PetCareApp.pdf)**.
-
-Para regenerarlo después de editar `docs/manual/manual.html` (requiere Microsoft Edge o Google Chrome):
-
+## Autor
+Jhanpol Parra Barreto
 ```cmd
 node docs/manual/construir.mjs
 ```
