@@ -1,7 +1,4 @@
-// Capa de acceso a datos.
-// - Si existe DATABASE_URL (producción / servidor público) usa PostgreSQL con "pg".
-// - Si no existe, usa PGlite: PostgreSQL embebido que guarda los datos en la carpeta ./data
-//   (no requiere instalar nada en el computador).
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

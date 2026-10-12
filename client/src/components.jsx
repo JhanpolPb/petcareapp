@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { BellRing, CalendarCheck, Eye, EyeOff, Lock, PawPrint, Scissors, Syringe } from 'lucide-react';
 import { api } from './api.js';
 
 export function Logo() {
@@ -71,6 +72,60 @@ export function Campo({ label, children, ayuda }) {
       {children}
       {ayuda && <small>{ayuda}</small>}
     </label>
+  );
+}
+
+// Input con icono a la izquierda
+export function Entrada({ icono: Icono, ...props }) {
+  return (
+    <div className="entrada">
+      <Icono className="entrada-icono" size={18} aria-hidden="true" />
+      <input {...props} />
+    </div>
+  );
+}
+
+// Input de contraseña con botón para mostrarla u ocultarla
+export function EntradaClave(props) {
+  const [ver, setVer] = useState(false);
+  const Ojo = ver ? EyeOff : Eye;
+  return (
+    <div className="entrada">
+      <Lock className="entrada-icono" size={18} aria-hidden="true" />
+      <input {...props} type={ver ? 'text' : 'password'} />
+      <button type="button" className="entrada-ojo" onClick={() => setVer(!ver)} aria-label={ver ? 'Ocultar contraseña' : 'Mostrar contraseña'}>
+        <Ojo size={18} />
+      </button>
+    </div>
+  );
+}
+
+const BENEFICIOS = [
+  [CalendarCheck, 'Citas veterinarias con horarios disponibles en tiempo real'],
+  [Syringe, 'Control de vacunas y refuerzos'],
+  [Scissors, 'Reserva de baño y peluquería'],
+  [BellRing, 'Recordatorios de citas y vacunas'],
+];
+
+// Estructura de las pantallas de inicio de sesión y registro
+export function PanelAuth({ titulo, texto, children }) {
+  return (
+    <div className="auth">
+      <aside className="auth-arte">
+        <Logo />
+        <div className="auth-arte-cuerpo">
+          <h2>{titulo}</h2>
+          <p>{texto}</p>
+          <ul className="beneficios">
+            {BENEFICIOS.map(([Icono, t]) => (
+              <li key={t}><span className="beneficio-icono"><Icono size={18} aria-hidden="true" /></span>{t}</li>
+            ))}
+          </ul>
+        </div>
+        <PawPrint className="auth-huella" size={260} strokeWidth={1.2} aria-hidden="true" />
+      </aside>
+      <main className="auth-lado">{children}</main>
+    </div>
   );
 }
 
