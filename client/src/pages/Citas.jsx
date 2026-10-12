@@ -148,9 +148,11 @@ function FormCita({ inicial, onClose, onGuardado }) {
   }, [mascotas]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!f.fecha) return;
+    // Mientras se escribe la fecha a mano el año pasa por valores incompletos (0002, 0020…): se ignoran
+    if (!f.fecha || f.fecha < '2000-01-01') return;
     setHoras(null);
     setAviso('');
+    setError('');
     const excluir = editando ? `&excluir=${inicial.id_cita}` : '';
     api(`/citas/disponibilidad?fecha=${f.fecha}${excluir}`)
       .then((d) => {
