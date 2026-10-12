@@ -5,6 +5,9 @@ import { Router } from 'express';
 import { query } from '../db.js';
 import { ah, hoy, sumarDias } from '../utils.js';
 
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const fmt = (iso) => `${Number(iso.slice(8, 10))} ${MESES[Number(iso.slice(5, 7)) - 1]}`;
+
 const r = Router();
 
 r.get('/', ah(async (req, res) => {
@@ -31,7 +34,9 @@ r.get('/', ah(async (req, res) => {
     ),
     query(
       `SELECT v.id_vacuna, v.nombre, v.fecha_proxima, m.nombre_mascota
-       FROM vacuna v JOIN mascota m ON m.id_mascota = v.id_mascota
+       FROM (SELECT DISTINCT ON (id_mascota, lower(nombre)) * FROM vacuna
+             ORDER BY id_mascota, lower(nombre), fecha_aplicacion DESC) v
+       JOIN mascota m ON m.id_mascota = v.id_mascota
        WHERE v.fecha_proxima IS NOT NULL AND v.fecha_proxima <= $2 ${propio}
          AND v.fecha_proxima >= ($1::date - INTERVAL '60 days')
        ORDER BY v.fecha_proxima`,
@@ -44,21 +49,21 @@ r.get('/', ah(async (req, res) => {
       tipo: 'cita',
       fecha: c.fecha,
       titulo: `Cita veterinaria de ${c.nombre_mascota}`,
-      detalle: `${c.fecha} a las ${c.hora}${c.motivo ? ` · ${c.motivo}` : ''}`,
+      detalle: `${c.fecha === h ? 'Hoy' : fmt(c.fecha)} a las ${c.hora}${c.motivo ? ` · ${c.motivo}` : ''}`,
       urgente: c.fecha === h,
     })),
     ...servicios.rows.map((s) => ({
       tipo: 'servicio',
       fecha: s.fecha_servicio,
       titulo: `${s.tipo_servicio} para ${s.nombre_mascota}`,
-      detalle: `${s.fecha_servicio} · ${s.estado}`,
+      detalle: `${s.fecha_servicio === h ? 'Hoy' : fmt(s.fecha_servicio)} · ${s.estado}`,
       urgente: s.fecha_servicio === h,
     })),
     ...vacunas.rows.map((v) => ({
       tipo: 'vacuna',
       fecha: v.fecha_proxima,
       titulo: `${v.fecha_proxima < h ? 'Vacuna vencida' : 'Próxima vacuna'}: ${v.nombre} (${v.nombre_mascota})`,
-      detalle: `Fecha de la dosis: ${v.fecha_proxima}`,
+      detalle: `${v.fecha_proxima < h ? 'Debió aplicarse el' : 'Aplicar el'} ${fmt(v.fecha_proxima)}`,
       urgente: v.fecha_proxima <= h,
     })),
   ].sort((a, b) => a.fecha.localeCompare(b.fecha));

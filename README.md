@@ -83,17 +83,21 @@ Las tablas se crean solas al iniciar. Verifica que el servidor responde en `/api
 | RF07 Generar recordatorios | CU-10 | *Inicio → Recordatorios* · `GET /api/recordatorios` |
 | RF11 Editar propietario | — | *Mi perfil* · `PUT /api/auth/perfil` |
 | RF12 Cancelar cita | — | *Citas → Cancelar* · `PATCH /api/citas/:id/cancelar` |
-| — | CU-11 Gestionar usuarios | *Usuarios* (admin) · `/api/admin/usuarios` |
-| — | CU-12 Gestionar mascotas | *Mascotas* (admin ve todas) |
-| — | CU-13 Gestionar citas | *Citas* (admin cambia el estado) |
-| — | CU-15 Gestionar servicios | *Peluquería* (admin cambia el estado) |
-| — | CU-16 Generar reportes | *Reportes* (admin, exporta CSV) · `GET /api/admin/reportes` |
+| Reprogramar cita | — | *Citas → Reprogramar* · `PUT /api/citas/:id` |
+| Modificar servicio | — | *Peluquería → Modificar* · `PUT /api/servicios/:id` |
+| — | CU-11 Gestionar usuarios | *Usuarios* (admin: crear, editar, cambiar rol, eliminar) · `/api/admin/usuarios` |
+| — | CU-12 Gestionar mascotas | *Mascotas* (admin ve todas, las registra y cambia de propietario) |
+| — | CU-13 Gestionar citas | *Citas* (admin crea, reprograma, cambia el estado y elimina) |
+| — | CU-15 Gestionar servicios | *Peluquería* (admin crea, modifica, cambia el estado y elimina) |
+| — | CU-16 Generar reportes | *Reportes* (admin: filtro por periodo, gráficas, CSV e impresión a PDF) · `GET /api/admin/reportes?desde=&hasta=` |
 
 **Recordatorios:** citas y servicios de los próximos 7 días, y vacunas cuya próxima dosis vence en 30 días o ya venció.
 
-**Reglas de negocio:** atención de lunes a sábado de 08:00 a 17:30 en franjas de 30 minutos; no se permiten dos citas en la misma franja ni fechas pasadas.
+**Panel de administración:** el *Inicio* del administrador muestra la agenda del día, las solicitudes de peluquería por confirmar, las vacunas vencidas y accesos rápidos. Todas las tablas tienen búsqueda, filtros y exportación a CSV.
 
-**Seguridad (RNF03):** contraseñas cifradas con bcrypt, sesiones con JWT (8 horas), consultas parametrizadas contra inyección SQL y control de acceso por rol.
+**Reglas de negocio:** atención de lunes a sábado; la primera cita es a las 08:00 y la última a las 17:30, en franjas de 30 minutos. No se permiten dos citas en la misma franja (lo garantiza un índice único en la base de datos, incluso con solicitudes simultáneas), ni fechas u horas que ya pasaron.
+
+**Seguridad (RNF03):** contraseñas cifradas con bcrypt, sesiones con JWT (8 horas), consultas parametrizadas contra inyección SQL y control de acceso por rol. El rol se verifica contra la base de datos en cada petición, así que un cambio de rol o la eliminación de una cuenta aplican de inmediato.
 
 ---
 

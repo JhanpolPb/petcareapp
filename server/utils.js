@@ -7,6 +7,11 @@ export function hoy() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: ZONA }).format(new Date());
 }
 
+// Hora actual (HH:MM) en la zona horaria de Colombia
+export function ahoraHM() {
+  return new Intl.DateTimeFormat('en-GB', { timeZone: ZONA, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date());
+}
+
 export function sumarDias(fechaISO, dias) {
   const d = new Date(`${fechaISO}T12:00:00Z`);
   d.setUTCDate(d.getUTCDate() + dias);
@@ -16,6 +21,7 @@ export function sumarDias(fechaISO, dias) {
 export const esFecha = (v) => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(Date.parse(v));
 export const esHora = (v) => typeof v === 'string' && /^([01]\d|2[0-3]):[0-5]\d(:00)?$/.test(v);
 export const esCorreo = (v) => typeof v === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+export const esId = (v) => /^\d{1,9}$/.test(String(v ?? ''));
 export const texto = (v, max) => typeof v === 'string' && v.trim().length > 0 && v.trim().length <= max;
 
 // Horario de atención veterinaria: lunes a sábado, 08:00 a 17:30, cada 30 minutos
@@ -33,12 +39,19 @@ export const TIPOS_SERVICIO = ['Baño', 'Corte de pelo', 'Baño y corte', 'Corte
 
 // Verifica que la mascota exista y que el usuario sea su dueño (o administrador)
 export async function mascotaAutorizada(idMascota, user) {
+  if (!esId(idMascota)) return { error: 400, msg: 'Seleccione una mascota válida' };
   const { rows } = await query('SELECT * FROM mascota WHERE id_mascota = $1', [idMascota]);
   if (rows.length === 0) return { error: 404, msg: 'Mascota no encontrada' };
   if (user.rol !== 'admin' && rows[0].id_propietario !== user.id) {
     return { error: 403, msg: 'No tiene permiso sobre esta mascota' };
   }
   return { mascota: rows[0] };
+}
+
+// router.param('id', idValido): ids no numéricos responden 404 en lugar de error 500
+export function idValido(_req, res, next, id) {
+  if (!esId(id)) return res.status(404).json({ error: 'Registro no encontrado' });
+  next();
 }
 
 // Envuelve controladores async para enviar errores al manejador central

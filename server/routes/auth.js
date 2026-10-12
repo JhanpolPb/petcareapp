@@ -7,7 +7,7 @@ import { ah, esCorreo, texto } from '../utils.js';
 
 const r = Router();
 
-const publico = (u) => ({
+export const publico = (u) => ({
   id_propietario: u.id_propietario,
   nombre: u.nombre,
   telefono: u.telefono,
@@ -15,7 +15,7 @@ const publico = (u) => ({
   rol: u.rol,
 });
 
-function validarDatos({ nombre, telefono, correo }) {
+export function validarDatos({ nombre, telefono, correo }) {
   if (!texto(nombre, 100)) return 'El nombre es obligatorio (máx. 100 caracteres)';
   if (typeof telefono !== 'string' || !/^[0-9+\s-]{7,20}$/.test(telefono.trim())) return 'Teléfono inválido (7 a 20 dígitos)';
   if (!esCorreo(correo) || correo.length > 100) return 'Correo electrónico inválido';

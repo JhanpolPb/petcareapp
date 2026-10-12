@@ -42,8 +42,16 @@ if (fs.existsSync(dist)) {
 
 // Manejador central de errores
 app.use((err, _req, res, _next) => {
-  console.error(err);
   if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'JSON inválido' });
+  // Violación de unicidad (PostgreSQL 23505): franja de cita ocupada o correo repetido
+  if (err.code === '23505') {
+    const msg = err.constraint === 'uq_cita_franja' || String(err.message).includes('uq_cita_franja')
+      ? 'Ese horario ya está ocupado, elija otro'
+      : 'Ya existe un registro con esos datos';
+    return res.status(409).json({ error: msg });
+  }
+  if (err.code === '22P02' || err.code === '22007' || err.code === '22008') return res.status(400).json({ error: 'Datos con formato inválido' });
+  console.error(err);
   res.status(500).json({ error: 'Error interno del servidor' });
 });
 

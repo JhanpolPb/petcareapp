@@ -37,6 +37,13 @@ export async function initDb() {
 
   const schema = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
   await driver.exec(schema);
+  // Impide dos citas programadas en la misma franja (también con solicitudes simultáneas).
+  // Va aparte del schema para que el servidor arranque aunque ya existan duplicados antiguos.
+  try {
+    await driver.exec(`CREATE UNIQUE INDEX IF NOT EXISTS uq_cita_franja ON cita (fecha, hora) WHERE estado = 'Programada'`);
+  } catch (e) {
+    console.warn('Aviso: hay citas duplicadas en la misma franja; no se creó el índice uq_cita_franja.', e.message);
+  }
   await seedAdmin();
 }
 
