@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Manual de usuario - PetCareApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #0f766e;
+    --verde-osc: #0b5a54;
+    --verde-claro: #e3f3f0;
+    --verde-suave: #f1f8f6;
+    --crema: #f7f4ee;
+    --texto: #1f2a2e;
+    --gris: #5f6b70;
+    --borde: #dcd5c8;
+    --coral: #b2412a;
+    --coral-claro: #fdebe6;
+    --ambar: #9a6516;
+    --ambar-claro: #fdf3dc;
+  }
+  @page {
+    size: letter;
+    margin: 20mm 20mm 22mm;
+    @bottom-left { content: "PetCareApp · Manual de usuario"; font: 600 7.5pt 'Source Sans 3', sans-serif; color: #8a9397; }
+    @bottom-right { content: counter(page); font: 700 8pt 'Nunito', sans-serif; color: #0f766e; }
+  }
+  @page portada { margin: 0; @bottom-left { content: none; } @bottom-right { content: none; } }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font: 10pt/1.5 'Source Sans 3', 'Segoe UI', sans-serif; color: var(--texto); }
+  h1, h2, h3, .marca { font-family: 'Nunito', 'Segoe UI', sans-serif; }
+  p { margin: 0 0 7pt; }
+  strong { font-weight: 700; }
+  a { color: var(--verde); text-decoration: none; }
+
+  /* ---------- Portada ---------- */
+  .portada { page: portada; height: 279.4mm; position: relative; overflow: hidden; break-after: page; background: var(--crema); }
+  .portada-banda {
+    position: absolute; inset: 0 0 auto 0; height: 118mm;
+    background: linear-gradient(150deg, #128278 0%, #0f766e 45%, #0b5a54 100%);
+  }
+  .portada-huella { position: absolute; right: 12mm; top: 4mm; width: 104mm; opacity: 0.1; transform: rotate(-14deg); }
+  .portada-logo {
+    position: absolute; left: 24mm; top: 84mm; background: #fff; border-radius: 9mm;
+    padding: 7mm 10mm 7mm 8mm; box-shadow: 0 6mm 14mm rgba(11, 90, 84, 0.18);
+  }
+  .portada-logo svg { display: block; width: 92mm; height: auto; }
+  .portada-texto { position: absolute; left: 24mm; right: 24mm; top: 146mm; }
+  .portada-tipo { font: 800 9pt 'Nunito', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: var(--verde); margin-bottom: 4mm; }
+  .portada h1 { font-size: 34pt; line-height: 1.05; margin: 0 0 5mm; font-weight: 800; letter-spacing: -0.01em; }
+  .portada-sub { font-size: 13pt; color: var(--gris); max-width: 130mm; margin: 0; line-height: 1.4; }
+  .portada-datos {
+    position: absolute; left: 24mm; right: 24mm; bottom: 22mm;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6mm;
+    border-top: 0.4mm solid var(--borde); padding-top: 6mm; font-size: 8.5pt; color: var(--gris);
+  }
+  .portada-datos b { display: block; font: 800 7pt 'Nunito', sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: var(--verde); margin-bottom: 1mm; }
+
+  /* ---------- Contenido (índice) ---------- */
+  .indice { break-after: page; }
+  .indice h2 { border: 0; margin-top: 0; }
+  .indice ol { list-style: none; padding: 0; margin: 0; counter-reset: cap; }
+  .indice > ol > li { counter-increment: cap; padding: 3.2mm 0; border-bottom: 0.3mm solid #ebe5da; display: grid; grid-template-columns: 11mm 1fr; }
+  .indice > ol > li::before { content: counter(cap, decimal-leading-zero); font: 800 11pt 'Nunito', sans-serif; color: var(--verde); }
+  .indice > ol > li > a { font: 700 11pt 'Nunito', sans-serif; color: var(--texto); }
+  .indice li ol { grid-column: 2; display: flex; flex-wrap: wrap; gap: 0.6mm 5mm; margin-top: 1mm; font-size: 8.5pt; color: var(--gris); }
+  .indice li ol a { color: var(--gris); }
+
+  /* ---------- Títulos ---------- */
+  .capitulo { break-before: page; }
+  .capitulo:first-of-type { break-before: auto; }
+  h2 {
+    font-size: 17pt; font-weight: 800; color: var(--texto); margin: 0 0 4mm; padding-bottom: 2.5mm;
+    border-bottom: 0.6mm solid var(--verde); display: flex; align-items: baseline; gap: 3mm;
+  }
+  h2 .num { color: var(--verde); }
+  h3 { font-size: 11.5pt; font-weight: 800; color: var(--verde-osc); margin: 6mm 0 2mm; break-after: avoid; }
+  .entrada-cap { font-size: 10.5pt; color: var(--gris); margin-bottom: 5mm; }
+
+  /* ---------- Listas y pasos ---------- */
+  ul, ol { margin: 0 0 7pt; padding-left: 5.5mm; }
+  li { margin-bottom: 1.2mm; }
+  ul li::marker { color: var(--verde); }
+  ol.pasos { list-style: none; padding: 0; counter-reset: paso; }
+  ol.pasos > li { counter-increment: paso; position: relative; padding-left: 8mm; margin-bottom: 2mm; }
+  ol.pasos > li::before {
+    content: counter(paso); position: absolute; left: 0; top: 0.3mm; width: 5mm; height: 5mm; border-radius: 50%;
+    background: var(--verde); color: #fff; font: 800 7.5pt/5mm 'Nunito', sans-serif; text-align: center;
+  }
+  ol.pasos ul { margin-top: 1mm; }
+
+  /* ---------- Figuras ---------- */
+  figure { margin: 4mm 0 5mm; break-inside: avoid; }
+  figure img { display: block; max-width: 100%; max-height: 88mm; margin: 0 auto; border: 0.3mm solid var(--borde); border-radius: 2.5mm; }
+  figure.compacta img { max-height: 70mm; }
+  figcaption { font-size: 8.5pt; color: var(--gris); margin-top: 1.8mm; text-align: center; }
+  figcaption b { color: var(--verde-osc); font-weight: 700; }
+
+  /* ---------- Tablas ---------- */
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 5mm; font-size: 9pt; break-inside: auto; }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th { text-align: left; background: var(--verde); color: #fff; font: 700 8pt 'Nunito', sans-serif; padding: 2mm 3mm; }
+  th:first-child { border-top-left-radius: 1.5mm; }
+  th:last-child { border-top-right-radius: 1.5mm; }
+  td { padding: 1.8mm 3mm; border-bottom: 0.3mm solid #e8e2d7; vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #fbfaf7; }
+  td.ico { width: 9mm; text-align: center; }
+  td.ico svg { color: var(--verde); vertical-align: -0.6mm; }
+
+  /* ---------- Notas ---------- */
+  .nota {
+    display: grid; grid-template-columns: 6mm 1fr; gap: 2.5mm; align-items: start;
+    background: var(--verde-suave); border-left: 1mm solid var(--verde); border-radius: 0 2mm 2mm 0;
+    padding: 2.8mm 4mm; margin: 3mm 0 5mm; font-size: 9.2pt; break-inside: avoid;
+  }
+  .nota svg { color: var(--verde); margin-top: 0.4mm; }
+  .nota p:last-child { margin: 0; }
+  .nota.aviso { background: var(--ambar-claro); border-color: #d69e2e; }
+  .nota.aviso svg { color: var(--ambar); }
+
+  .chip { display: inline-block; font: 700 7.5pt 'Nunito', sans-serif; padding: 0.3mm 2mm; border-radius: 3mm; white-space: nowrap; }
+  .chip.azul { background: #e6f0fa; color: #2b6cb0; }
+  .chip.verde { background: #e3f4ea; color: #2f855a; }
+  .chip.ambar { background: var(--ambar-claro); color: var(--ambar); }
+  .chip.coral { background: var(--coral-claro); color: var(--coral); }
+  .chip.gris { background: #eeece8; color: var(--gris); }
+  .boton { font-weight: 700; color: var(--verde-osc); }
+  .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .evitar-corte { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- ======================= PORTADA ======================= -->
+<section class="portada">
+  <div class="portada-banda"></div>
+  {{huella}}
+  <div class="portada-logo">{{logo}}</div>
+  <div class="portada-texto">
+    <div class="portada-tipo">Manual de usuario · Versión 1.0</div>
+    <h1>Guía de uso de PetCareApp</h1>
+    <p class="portada-sub">Plataforma web para la gestión de servicios integrales para mascotas: citas veterinarias, vacunación, peluquería y reportes.</p>
+  </div>
+  <div class="portada-datos">
+    <div><b>Asignatura</b>Gerencia de Proyectos Informáticos<br>Politécnico Grancolombiano</div>
+    <div><b>Equipo</b>Grupo B03<br>Subgrupo 27</div>
+    <div><b>Fecha</b>Octubre de 2026<br>petcareapp-sgns.onrender.com</div>
+  </div>
+</section>
+
+<!-- ======================= CONTENIDO ======================= -->
+<section class="indice">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#c1">Introducción</a><ol><li>Propósito</li><li>Tipos de usuario</li><li>Requisitos</li></ol></li>
+    <li><a href="#c2">Ingreso al sistema</a><ol><li>Registro</li><li>Inicio de sesión</li><li>Cierre de sesión</li></ol></li>
+    <li><a href="#c3">Conceptos generales de la interfaz</a><ol><li>Menú</li><li>Botones de acción</li><li>Confirmaciones y avisos</li><li>Búsqueda y filtros</li></ol></li>
+    <li><a href="#c4">Uso para el propietario</a><ol><li>Inicio</li><li>Mis mascotas</li><li>Citas</li><li>Vacunación</li><li>Peluquería</li><li>Mi perfil</li></ol></li>
+    <li><a href="#c5">Uso para el administrador</a><ol><li>Panel</li><li>Usuarios</li><li>Mascotas</li><li>Citas</li><li>Vacunas</li><li>Peluquería</li><li>Reportes</li></ol></li>
+    <li><a href="#c6">Reglas de funcionamiento</a><ol><li>Horario</li><li>Estados</li><li>Vacunas</li><li>Recordatorios</li></ol></li>
+    <li><a href="#c7">Solución de problemas</a></li>
+  </ol>
+</section>
+
+<!-- ======================= 1 ======================= -->
+<section class="capitulo" id="c1">
+  <h2><span class="num">1</span> Introducción</h2>
+  <p class="entrada-cap">Este manual describe cómo usar PetCareApp, la plataforma con la que la veterinaria y los dueños de mascotas gestionan citas, vacunas y servicios de peluquería desde el navegador.</p>
+
+  <h3>1.1 Propósito del documento</h3>
+  <p>El manual acompaña a cada tipo de usuario en las tareas del día a día: registrarse, inscribir a sus mascotas, agendar citas, consultar el esquema de vacunación y, en el caso del personal de la veterinaria, administrar la información y generar reportes. Cada procedimiento se explica en pasos numerados y, cuando es útil, con una captura de la pantalla correspondiente.</p>
+
+  <h3>1.2 Tipos de usuario</h3>
+  <table class="evitar-corte">
+    <thead><tr><th style="width:24%">Rol</th><th>Descripción</th><th style="width:40%">Funciones principales</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Propietario</strong></td><td>Dueño de una o varias mascotas. Crea su propia cuenta desde la pantalla de registro.</td><td>Registrar mascotas, solicitar y reprogramar citas, pedir servicios de peluquería, consultar vacunas e historial.</td></tr>
+      <tr><td><strong>Administrador</strong></td><td>Personal de la veterinaria. Su cuenta la crea otro administrador.</td><td>Gestionar usuarios, mascotas, citas, vacunas y servicios de todos los propietarios, y generar reportes.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1.3 Requisitos</h3>
+  <ul>
+    <li>Un navegador actualizado: Google Chrome, Microsoft Edge, Mozilla Firefox o Safari.</li>
+    <li>Conexión a internet.</li>
+    <li>Dirección de acceso: <a href="https://petcareapp-sgns.onrender.com">https://petcareapp-sgns.onrender.com</a></li>
+  </ul>
+  <p>La aplicación no requiere instalación y funciona en computador, tableta y celular.</p>
+</section>
+
+<!-- ======================= 2 ======================= -->
+<section class="capitulo" id="c2">
+  <h2><span class="num">2</span> Ingreso al sistema</h2>
+  <p class="entrada-cap">Para usar PetCareApp se necesita una cuenta. Los propietarios se registran por su cuenta; los administradores reciben la suya de la veterinaria.</p>
+
+  <figure class="compacta">
+    <img src="img/01-login.jpg" alt="Pantalla de inicio de sesión">
+    <figcaption><b>Figura 1.</b> Pantalla de inicio de sesión. A la izquierda se resumen los servicios; a la derecha está el formulario de acceso.</figcaption>
+  </figure>
+
+  <h3>2.1 Registro de un propietario</h3>
+  <ol class="pasos">
+    <li>En la pantalla de inicio de sesión, haga clic en <span class="boton">Regístrate</span>.</li>
+    <li>Diligencie los datos solicitados:
+      <ul>
+        <li><strong>Nombre completo</strong>, de hasta 100 caracteres.</li>
+        <li><strong>Teléfono</strong>, entre 7 y 20 dígitos; se admiten espacios, el signo + y guiones.</li>
+        <li><strong>Correo electrónico</strong>, que será su usuario. No puede estar registrado previamente.</li>
+        <li><strong>Contraseña</strong> y su confirmación, de al menos 8 caracteres.</li>
+      </ul>
+    </li>
+    <li>Haga clic en <span class="boton">Crear cuenta</span>. El sistema abre la sesión automáticamente y muestra la página de inicio.</li>
+  </ol>
+  <div class="nota">{{icon:Eye}}<p>El ícono del ojo, al lado derecho de los campos de contraseña, permite ver lo que se está escribiendo para evitar errores.</p></div>
+
+  <h3>2.2 Inicio de sesión</h3>
+  <ol class="pasos">
+    <li>Escriba su correo electrónico y su contraseña.</li>
+    <li>Haga clic en <span class="boton">Ingresar</span>.</li>
+  </ol>
+  <p>Si los datos no coinciden con una cuenta, el sistema muestra el mensaje «Correo o contraseña incorrectos». La sesión permanece abierta durante 8 horas; pasado ese tiempo es necesario ingresar de nuevo.</p>
+
+  <h3>2.3 Cierre de sesión</h3>
+  <p>Haga clic en el ícono {{icon:LogOut}} que aparece junto a su nombre, en la parte inferior del menú lateral. En el celular, abra primero el menú con el botón {{icon:Menu}} de la esquina superior.</p>
+
+  <div class="nota aviso">{{icon:Clock}}<p><strong>Primera carga del día.</strong> La aplicación está alojada en un servidor gratuito que se suspende después de 15 minutos sin uso. La primera visita tras ese periodo puede tardar cerca de 50 segundos; las siguientes son inmediatas. La información no se pierde durante la suspensión.</p></div>
+</section>
+
+<!-- ======================= 3 ======================= -->
+<section class="capitulo" id="c3">
+  <h2><span class="num">3</span> Conceptos generales de la interfaz</h2>
+  <p class="entrada-cap">Todas las pantallas comparten el mismo menú, los mismos botones y la misma forma de confirmar acciones, de modo que basta con aprenderlos una vez.</p>
+
+  <h3>3.1 Menú lateral</h3>
+  <p>El menú de la izquierda da acceso a cada módulo y resalta en verde el que está abierto. Las opciones <em>Usuarios</em> y <em>Reportes</em> solo aparecen para el administrador, agrupadas bajo el título «Administración». En la parte inferior se muestran el nombre del usuario, su rol y el botón para cerrar sesión.</p>
+  <table>
+    <thead><tr><th style="width:9mm"></th><th style="width:30%">Opción</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td class="ico">{{icon:LayoutDashboard}}</td><td>Inicio</td><td>Resumen del día, recordatorios y accesos rápidos.</td></tr>
+      <tr><td class="ico">{{icon:PawPrint}}</td><td>Mis mascotas / Mascotas</td><td>Registro, edición e historial de las mascotas.</td></tr>
+      <tr><td class="ico">{{icon:Stethoscope}}</td><td>Citas veterinarias</td><td>Solicitud, reprogramación y seguimiento de citas.</td></tr>
+      <tr><td class="ico">{{icon:Syringe}}</td><td>Vacunación</td><td>Consulta y registro de vacunas aplicadas.</td></tr>
+      <tr><td class="ico">{{icon:Scissors}}</td><td>Peluquería</td><td>Solicitud y seguimiento de baño, corte y otros servicios.</td></tr>
+      <tr><td class="ico">{{icon:Users}}</td><td>Usuarios</td><td>Administración de cuentas (solo administrador).</td></tr>
+      <tr><td class="ico">{{icon:ChartColumn}}</td><td>Reportes</td><td>Indicadores, gráficas y exportación (solo administrador).</td></tr>
+      <tr><td class="ico">{{icon:UserCog}}</td><td>Mi perfil</td><td>Datos de contacto y cambio de contraseña.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.2 Botones de acción</h3>
+  <p>En las tablas y tarjetas, las acciones sobre cada registro se representan con íconos. Al pasar el puntero sobre uno de ellos aparece su nombre.</p>
+  <table>
+    <thead><tr><th style="width:9mm"></th><th style="width:30%">Acción</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td class="ico">{{icon:Pencil}}</td><td>Editar o modificar</td><td>Abre el formulario con los datos actuales del registro.</td></tr>
+      <tr><td class="ico">{{icon:CalendarClock}}</td><td>Reprogramar</td><td>Cambia la fecha, la hora o el motivo de una cita programada.</td></tr>
+      <tr><td class="ico">{{icon:Ban}}</td><td>Cancelar</td><td>Cancela una cita o un servicio pendiente.</td></tr>
+      <tr><td class="ico">{{icon:Trash2}}</td><td>Eliminar</td><td>Borra el registro de forma definitiva.</td></tr>
+      <tr><td class="ico">{{icon:Check}}</td><td>Marcar como atendida</td><td>Disponible en la agenda del día del administrador.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.3 Confirmaciones y avisos</h3>
+  <p>Antes de cancelar o eliminar, el sistema solicita confirmación en una ventana emergente. El botón <span class="boton">Volver</span> deja todo como estaba; el botón rojo ejecuta la acción. Después de cada operación aparece un aviso en la esquina inferior derecha: oscuro con un visto bueno cuando la operación fue exitosa, y rojo con la causa cuando no pudo realizarse.</p>
+  <p>Los formularios se cierran sin guardar con el botón <span class="boton">Volver</span>, con la X de la esquina o con la tecla Esc.</p>
+
+  <h3>3.4 Búsqueda, filtros y exportación</h3>
+  <ul>
+    <li><strong>Buscador</strong> {{icon:Search}}: filtra la lista a medida que se escribe, sin distinguir mayúsculas ni tildes.</li>
+    <li><strong>Pestañas de filtro</strong>: agrupan los registros por estado, especie o rol, e indican cuántos hay en cada grupo.</li>
+    <li><strong>Exportar</strong> {{icon:Download}} (administrador): descarga en formato CSV, compatible con Excel, la lista que se está viendo con los filtros aplicados.</li>
+  </ul>
+  <p>En pantallas pequeñas el menú se oculta y se abre con el botón {{icon:Menu}}. Las tablas anchas se desplazan horizontalmente con el dedo.</p>
+</section>
+
+<!-- ======================= 4 ======================= -->
+<section class="capitulo" id="c4">
+  <h2><span class="num">4</span> Uso para el propietario</h2>
+  <p class="entrada-cap">El primer paso es registrar a la mascota. A partir de ese momento se pueden agendar citas, solicitar peluquería y consultar su vacunación.</p>
+
+  <h3>4.1 Página de inicio</h3>
+  <p>Al ingresar se muestran tres indicadores (mascotas registradas, citas programadas y recordatorios activos), la lista de recordatorios y las próximas citas. Los recordatorios del día o vencidos aparecen resaltados en un tono rojizo.</p>
+  <figure>
+    <img src="img/02-inicio-propietario.jpg" alt="Inicio del propietario">
+    <figcaption><b>Figura 2.</b> Página de inicio de un propietario con sus recordatorios y próximas citas.</figcaption>
+  </figure>
+
+  <h3>4.2 Mis mascotas</h3>
+  <p><strong>Para registrar una mascota:</strong></p>
+  <ol class="pasos">
+    <li>Haga clic en <span class="boton">Registrar mascota</span>.</li>
+    <li>Escriba el nombre, seleccione la especie (perro, gato, ave, conejo u otro), indique la raza, la edad en años y el sexo.</li>
+    <li>Haga clic en <span class="boton">Registrar</span>.</li>
+  </ol>
+  <p>En cada tarjeta, el ícono {{icon:Pencil}} permite corregir los datos y el ícono {{icon:Trash2}} elimina la mascota. Al eliminarla también se borran sus citas, vacunas y servicios.</p>
+  <p>Al hacer clic sobre la tarjeta o en <span class="boton">Historial</span> se abre la ficha de la mascota, con el número de citas, vacunas y servicios y una línea de tiempo de todo lo realizado. Desde la ficha también se puede agendar una cita directamente.</p>
+  <figure>
+    <img src="img/03-historial-mascota.jpg" alt="Historial de una mascota">
+    <figcaption><b>Figura 3.</b> Ficha e historial de una mascota. Las pestañas de la derecha filtran por citas, vacunas o peluquería.</figcaption>
+  </figure>
+
+  <h3>4.3 Citas veterinarias</h3>
+  <p><strong>Para solicitar una cita:</strong></p>
+  <ol class="pasos">
+    <li>Haga clic en <span class="boton">Solicitar cita</span>.</li>
+    <li>Seleccione la mascota y la fecha. No se aceptan fechas pasadas ni domingos.</li>
+    <li>Elija una de las horas disponibles. El sistema solo muestra las franjas que nadie ha reservado.</li>
+    <li>Si lo desea, escriba el motivo de la consulta.</li>
+    <li>Haga clic en <span class="boton">Agendar cita</span>.</li>
+  </ol>
+  <figure>
+    <img src="img/04-solicitar-cita.jpg" alt="Formulario para solicitar una cita">
+    <figcaption><b>Figura 4.</b> Formulario de solicitud de cita. La hora seleccionada aparece resaltada en verde.</figcaption>
+  </figure>
+  <p>Mientras una cita esté programada puede <strong>reprogramarse</strong> con el ícono {{icon:CalendarClock}} o <strong>cancelarse</strong> con el ícono {{icon:Ban}}. Al cancelarla, la franja queda libre para otra persona. Las pestañas superiores separan las citas programadas, atendidas y canceladas, y el buscador permite ubicar una cita por mascota o motivo.</p>
+
+  <h3>4.4 Vacunación</h3>
+  <p>Las vacunas las registra la veterinaria al momento de aplicarlas; el propietario las consulta en este módulo. Para cada vacuna se muestran la fecha de aplicación, la fecha de la próxima dosis y su estado, explicado en la sección 6.3. Las pestañas permiten ver por separado las vencidas, las próximas a vencer, las que están al día y las que no requieren refuerzo.</p>
+
+  <h3>4.5 Peluquería</h3>
+  <ol class="pasos">
+    <li>Haga clic en <span class="boton">Solicitar servicio</span>.</li>
+    <li>Seleccione la mascota y el tipo de servicio: baño, corte de pelo, baño y corte, corte de uñas o limpieza de oídos.</li>
+    <li>Elija la fecha deseada, de lunes a sábado, y haga clic en <span class="boton">Solicitar</span>.</li>
+  </ol>
+  <p>La peluquería confirma la hora exacta por teléfono. Mientras la solicitud esté en estado <span class="chip ambar">Solicitado</span> o <span class="chip azul">Confirmado</span> se puede modificar {{icon:Pencil}} o cancelar {{icon:Ban}}.</p>
+
+  <h3>4.6 Mi perfil</h3>
+  <p>Desde esta opción se actualizan el nombre, el teléfono y el correo. Para cambiar la contraseña, escriba la nueva en <em>Nueva contraseña</em> y repítala en <em>Confirmar contraseña</em>; si deja ambos campos vacíos se conserva la actual. Los cambios se guardan con <span class="boton">Guardar cambios</span>.</p>
+</section>
+
+<!-- ======================= 5 ======================= -->
+<section class="capitulo" id="c5">
+  <h2><span class="num">5</span> Uso para el administrador</h2>
+  <p class="entrada-cap">El administrador tiene acceso a la información de todos los propietarios y puede crear, modificar y eliminar cualquier registro. Además de lo descrito en el capítulo anterior, cuenta con las funciones siguientes.</p>
+
+  <h3>5.1 Panel de inicio</h3>
+  <p>El panel reúne lo que requiere atención durante la jornada:</p>
+  <ul>
+    <li><strong>Accesos rápidos</strong> para crear una cita, una vacuna, un servicio, una mascota o un usuario.</li>
+    <li><strong>Indicadores</strong> de citas pendientes del día, servicios por confirmar, vacunas vencidas y total de propietarios y mascotas.</li>
+    <li><strong>Agenda de hoy</strong>, ordenada por hora. El ícono {{icon:Check}} marca la cita como atendida.</li>
+    <li><strong>Peluquería por confirmar</strong>, con el botón <span class="boton">Confirmar</span> para cada solicitud.</li>
+    <li><strong>Recordatorios de la semana</strong> de todos los propietarios.</li>
+  </ul>
+  <figure>
+    <img src="img/05-inicio-admin.jpg" alt="Panel del administrador">
+    <figcaption><b>Figura 5.</b> Panel de inicio del administrador.</figcaption>
+  </figure>
+
+  <h3>5.2 Gestión de usuarios</h3>
+  <ol class="pasos">
+    <li>Haga clic en <span class="boton">Nuevo usuario</span>.</li>
+    <li>Diligencie nombre, teléfono, rol (propietario o administrador), correo y contraseña inicial.</li>
+    <li>Haga clic en <span class="boton">Crear usuario</span>.</li>
+  </ol>
+  <p>Con el ícono {{icon:Pencil}} se modifican los datos, el rol o la contraseña de una cuenta; si el campo de contraseña se deja vacío, se conserva la actual. El ícono {{icon:Trash2}} elimina la cuenta junto con sus mascotas y su historial. Un administrador no puede quitarse su propio rol ni eliminar su cuenta, y los cambios de rol tienen efecto inmediato aunque el usuario tenga la sesión abierta.</p>
+  <figure>
+    <img src="img/06-usuarios.jpg" alt="Gestión de usuarios">
+    <figcaption><b>Figura 6.</b> Listado de usuarios con su rol y número de mascotas.</figcaption>
+  </figure>
+
+  <h3>5.3 Mascotas</h3>
+  <p>El formulario del administrador incluye el campo <em>Propietario</em>: al registrar una mascota se elige su dueño y, al editarla, puede asignarse a otro. El buscador encuentra mascotas por nombre, raza o propietario, y la ficha muestra además el teléfono y el correo del dueño.</p>
+  <figure>
+    <img src="img/07-mascotas.jpg" alt="Gestión de mascotas">
+    <figcaption><b>Figura 7.</b> Mascotas registradas, filtradas por especie desde las pestañas superiores.</figcaption>
+  </figure>
+
+  <h3>5.4 Citas</h3>
+  <p>El administrador puede agendar citas para cualquier mascota; en el selector cada opción aparece como «mascota — propietario». El estado de una cita se cambia desde la lista desplegable de la columna <em>Estado</em>. También puede reprogramar {{icon:CalendarClock}} cualquier cita programada, incluso cambiando la mascota, y eliminarla {{icon:Trash2}} de forma definitiva.</p>
+  <figure>
+    <img src="img/08-citas.jpg" alt="Gestión de citas">
+    <figcaption><b>Figura 8.</b> Citas programadas. Las del día se marcan con la etiqueta «Hoy».</figcaption>
+  </figure>
+  <div class="nota">{{icon:Info}}<p>Si se intenta devolver a «Programada» una cita cuya franja ya fue tomada por otra persona, el sistema lo impide y muestra el aviso «Ese horario ya está ocupado».</p></div>
+
+  <h3>5.5 Vacunas</h3>
+  <ol class="pasos">
+    <li>Haga clic en <span class="boton">Registrar vacuna</span>.</li>
+    <li>Seleccione la mascota y escriba el nombre de la vacuna o elíjalo de la lista sugerida.</li>
+    <li>Indique la fecha de aplicación, que no puede ser posterior a hoy.</li>
+    <li>Si corresponde, indique la próxima dosis. Los botones <em>1 mes</em>, <em>3 meses</em>, <em>6 meses</em> y <em>1 año</em> la calculan a partir de la fecha de aplicación.</li>
+    <li>Haga clic en <span class="boton">Guardar</span>.</li>
+  </ol>
+  <figure>
+    <img src="img/09-vacunas.jpg" alt="Gestión de vacunas">
+    <figcaption><b>Figura 9.</b> Registro de vacunas con el estado de cada refuerzo.</figcaption>
+  </figure>
+
+  <h3>5.6 Peluquería</h3>
+  <p>El administrador crea servicios para cualquier mascota, cambia su estado desde la lista desplegable, los modifica mientras están pendientes y los elimina con el ícono {{icon:Trash2}}.</p>
+  <figure>
+    <img src="img/10-peluqueria.jpg" alt="Gestión de servicios de peluquería">
+    <figcaption><b>Figura 10.</b> Servicios de peluquería y su estado.</figcaption>
+  </figure>
+
+  <h3>5.7 Reportes</h3>
+  <ol class="pasos">
+    <li>Seleccione el periodo en las pestañas superiores: todo, últimos 30 días, este mes, este año o un rango personalizado.</li>
+    <li>Revise los indicadores: citas y porcentaje de atención, cancelaciones, servicios realizados, vacunas aplicadas, vencidas y por vencer, y total de propietarios y mascotas.</li>
+    <li>Consulte las gráficas: citas y servicios por mes, citas y servicios por estado, servicios más solicitados, horarios con más demanda, propietarios con más citas y mascotas por especie.</li>
+  </ol>
+  <figure>
+    <img src="img/11-reportes.jpg" alt="Reportes">
+    <figcaption><b>Figura 11.</b> Módulo de reportes con indicadores y gráficas del periodo.</figcaption>
+  </figure>
+  <p>Al pasar el puntero sobre una barra se muestra su valor y porcentaje. El ícono {{icon:Table2}} de cada gráfica presenta los mismos datos en forma de tabla. El botón <span class="boton">Exportar CSV</span> descarga el reporte completo y <span class="boton">Imprimir / PDF</span> abre la impresión del navegador, donde puede elegirse «Guardar como PDF». La distribución de mascotas por especie corresponde siempre al total registrado; los demás datos dependen del periodo elegido.</p>
+</section>
+
+<!-- ======================= 6 ======================= -->
+<section class="capitulo" id="c6">
+  <h2><span class="num">6</span> Reglas de funcionamiento</h2>
+  <p class="entrada-cap">Estas reglas las aplica el sistema de forma automática; conocerlas ayuda a entender por qué algunas opciones no están disponibles en ciertos casos.</p>
+
+  <h3>6.1 Horario de atención</h3>
+  <ul>
+    <li>La veterinaria atiende de lunes a sábado; los domingos no se reciben citas ni servicios.</li>
+    <li>Las citas se asignan cada 30 minutos: la primera a las 8:00 a. m. y la última a las 5:30 p. m., para un total de 20 franjas diarias.</li>
+    <li>Cada franja admite una sola cita para toda la veterinaria. Si dos personas solicitan la misma hora al mismo tiempo, solo se registra la primera.</li>
+    <li>No se aceptan fechas pasadas ni horas del día que ya transcurrieron.</li>
+    <li>Los servicios de peluquería se solicitan por día; la hora la confirma la peluquería por teléfono.</li>
+  </ul>
+
+  <h3>6.2 Estados de citas y servicios</h3>
+  <figure>{{diagrama}}
+    <figcaption><b>Figura 12.</b> Ciclo de vida de una cita y de un servicio. Los estados resaltados son los que todavía admiten cambios.</figcaption>
+  </figure>
+  <p>Una cita se crea como <span class="chip azul">Programada</span> y termina como <span class="chip verde">Atendida</span> o <span class="chip gris">Cancelada</span>. Un servicio se crea como <span class="chip ambar">Solicitado</span>, pasa a <span class="chip azul">Confirmado</span> y termina como <span class="chip verde">Realizado</span> o <span class="chip gris">Cancelado</span>. El administrador puede asignar cualquier estado desde la lista desplegable y devolver una cita a «Programada» si su franja sigue libre.</p>
+
+  <h3>6.3 Estados de las vacunas</h3>
+  <table class="evitar-corte">
+    <thead><tr><th style="width:26%">Estado</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip coral">Vencida</span></td><td>La fecha de la próxima dosis ya pasó.</td></tr>
+      <tr><td><span class="chip ambar">Próxima</span></td><td>La próxima dosis vence dentro de los siguientes 30 días.</td></tr>
+      <tr><td><span class="chip verde">Al día</span></td><td>La próxima dosis vence en más de 30 días.</td></tr>
+      <tr><td><span class="chip gris">Sin refuerzo</span></td><td>La vacuna no tiene una próxima dosis registrada.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.4 Recordatorios</h3>
+  <p>Los recordatorios se calculan cada vez que se abre la página de inicio. Incluyen las citas programadas y los servicios pendientes de los próximos 7 días, y las vacunas que vencen en los próximos 30 días o que vencieron hace menos de 60. Si una vacuna se vuelve a aplicar, se toma en cuenta solo el registro más reciente. El propietario ve los recordatorios de sus mascotas y el administrador los de todas.</p>
+</section>
+
+<!-- ======================= 7 ======================= -->
+<section class="capitulo" id="c7">
+  <h2><span class="num">7</span> Solución de problemas</h2>
+  <p class="entrada-cap">La mayoría de los mensajes del sistema indican qué dato corregir. La siguiente tabla reúne los casos más frecuentes.</p>
+  <table>
+    <thead><tr><th style="width:34%">Mensaje o situación</th><th style="width:30%">Causa</th><th>Solución</th></tr></thead>
+    <tbody>
+      <tr><td>Correo o contraseña incorrectos</td><td>Los datos no coinciden con ninguna cuenta.</td><td>Verifique mayúsculas y espacios. Si olvidó la contraseña, solicite al administrador que la restablezca.</td></tr>
+      <tr><td>Ya existe una cuenta con ese correo</td><td>El correo ya está registrado.</td><td>Inicie sesión con ese correo o use uno diferente.</td></tr>
+      <tr><td>La contraseña debe tener mínimo 8 caracteres</td><td>La contraseña es demasiado corta.</td><td>Escriba una contraseña de 8 caracteres o más.</td></tr>
+      <tr><td>Las contraseñas no coinciden</td><td>Los dos campos de contraseña son diferentes.</td><td>Escriba la misma contraseña en ambos campos.</td></tr>
+      <tr><td>Ese horario ya está ocupado, elija otro</td><td>Otra persona reservó la franja primero.</td><td>Seleccione otra de las horas disponibles.</td></tr>
+      <tr><td>Esa hora ya pasó, elija una más tarde</td><td>Se eligió una hora del día que ya transcurrió.</td><td>Escoja una hora posterior u otro día.</td></tr>
+      <tr><td>No hay atención los domingos</td><td>La fecha elegida es domingo.</td><td>Seleccione un día de lunes a sábado.</td></tr>
+      <tr><td>Solo se pueden modificar citas programadas</td><td>La cita ya fue atendida o cancelada.</td><td>Solicite una nueva cita.</td></tr>
+      <tr><td>Sesión expirada o inválida</td><td>Pasaron más de 8 horas o la cuenta cambió.</td><td>Inicie sesión nuevamente.</td></tr>
+      <tr><td>Primero debes registrar una mascota</td><td>La cuenta aún no tiene mascotas.</td><td>Registre una mascota en el módulo correspondiente.</td></tr>
+      <tr><td>La página tarda en cargar</td><td>El servidor estaba suspendido por inactividad.</td><td>Espere cerca de 50 segundos; luego funciona con normalidad.</td></tr>
+    </tbody>
+  </table>
+  <p>Si un problema persiste, cierre la sesión, vuelva a ingresar y, si continúa, comuníquese con el administrador de la veterinaria.</p>
+</section>
+
+</body>
+</html>

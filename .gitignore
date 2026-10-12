@@ -3,3 +3,5 @@ client/node_modules/
 client/dist/
 data/
 .env
+docs/manual/manual-final.html
+docs/manual/.perfil-edge/
