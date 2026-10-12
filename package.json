@@ -1,0 +1,26 @@
+{
+  "name": "petcareapp",
+  "version": "1.0.0",
+  "description": "PetCareApp - Plataforma para la gestión de servicios integrales para mascotas",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "build": "npm install --prefix client --include=dev && npm run build --prefix client",
+    "setup": "npm install && npm install --prefix client"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.7",
+    "express": "^4.22.3",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1"
+  }
+}
