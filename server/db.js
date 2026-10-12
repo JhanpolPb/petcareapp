@@ -1,4 +1,3 @@
-
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,10 +15,28 @@ export async function initDb() {
     const pool = new pg.Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: process.env.DATABASE_SSL === 'false' ? false : { rejectUnauthorized: false },
+      max: 5,
+      // Neon y otros servicios cierran las conexiones inactivas: se liberan antes de que eso pase
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 15000,
+      keepAlive: true,
     });
+    // Una conexión inactiva que el servidor corta no debe tumbar el proceso
+    pool.on('error', (e) => console.warn('Conexión a la base de datos cerrada:', e.message));
+    // Si la conexión se cortó, la consulta se reintenta una vez con una conexión nueva
+    const conReintento = async (fn) => {
+      try {
+        return await fn();
+      } catch (e) {
+        const cortada = ['ECONNRESET', 'EPIPE', 'ETIMEDOUT', '57P01'].includes(e.code)
+          || /Connection terminated|connection timeout/i.test(e.message);
+        if (!cortada) throw e;
+        return fn();
+      }
+    };
     driver = {
-      query: (text, params) => pool.query(text, params),
-      exec: (sql) => pool.query(sql),
+      query: (text, params) => conReintento(() => pool.query(text, params)),
+      exec: (sql) => conReintento(() => pool.query(sql)),
     };
     console.log('Base de datos: PostgreSQL (DATABASE_URL)');
   } else {
