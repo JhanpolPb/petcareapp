@@ -10,7 +10,6 @@
 
 <p align="center">
   <a href="https://petcareapp-sgns.onrender.com"><b>Abrir la aplicación</b></a> ·
-  <a href="docs/Manual%20de%20usuario%20-%20PetCareApp.pdf"><b>Manual de usuario (PDF)</b></a>
 </p>
 
 
