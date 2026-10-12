@@ -183,6 +183,5 @@ Implementa las cinco tablas del modelo entidad-relación de la Entrega 2 (`propi
 
 ## Autor
 Jhanpol Parra Barreto
-```cmd
 node docs/manual/construir.mjs
 ```
