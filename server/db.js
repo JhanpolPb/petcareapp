@@ -69,8 +69,9 @@ export function query(text, params = []) {
 }
 
 async function seedAdmin() {
-  const correo = (process.env.ADMIN_EMAIL || 'admin@petcareapp.com').toLowerCase();
-  const pass = process.env.ADMIN_PASSWORD || 'Admin123*';
+  const correo = (process.env.ADMIN_EMAIL || 'admin@petcareapp.com').trim().toLowerCase();
+  // trim: evita que un espacio pegado por error en la variable de entorno quede en la contraseña
+  const pass = (process.env.ADMIN_PASSWORD || '').trim() || 'Admin123*';
   const { rows } = await query('SELECT id_propietario FROM propietario WHERE correo = $1', [correo]);
   if (rows.length === 0) {
     const hash = await bcrypt.hash(pass, 10);
